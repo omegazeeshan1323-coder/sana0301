@@ -30,8 +30,8 @@ const MusicPlayer = forwardRef((props, ref) => {
 
     return (
         <div className="fixed bottom-6 left-6 z-50">
-            {/* Hidden Player for YouTube Audio - Must not be display:none for YouTube API to work */}
-            <div className="fixed -top-full opacity-0 pointer-events-none">
+            {/* Hidden Player for YouTube Audio - Kept on-screen to avoid browser throttling */}
+            <div className="fixed bottom-0 right-0 w-2 h-2 opacity-[0.01] pointer-events-none z-[-1]">
                 <ReactPlayer
                     url={SONG_URL}
                     playing={isPlaying}
