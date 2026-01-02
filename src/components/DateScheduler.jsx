@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Heart, X, Calendar, Clock, Send } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, X, Calendar, Clock, Send, Sparkles } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const DATE_TYPES = [
     "Romantic Dinner 🕯️",
@@ -10,7 +11,9 @@ const DATE_TYPES = [
     "Surprise Me 🎁"
 ];
 
-const DateScheduler = ({ onClose }) => {
+const DateScheduler = () => {
+    const { currentTheme } = useTheme();
+    const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState({
         date: '',
         time: '',
@@ -52,118 +55,134 @@ const DateScheduler = ({ onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <motion.div
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 50, opacity: 0 }}
-                className="w-full max-w-md bg-gray-900/90 border border-purple-500/30 rounded-2xl p-6 shadow-2xl relative"
+        <div className="py-12 flex justify-center">
+            <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsOpen(true)}
+                className={`flex items-center gap-3 px-8 py-4 rounded-full border ${currentTheme.border} ${currentTheme.secondary} backdrop-blur-md shadow-lg group transition-all duration-300`}
             >
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-white"
-                >
-                    <X size={24} />
-                </button>
+                <Sparkles className={`${currentTheme.accent} group-hover:spin-slow`} size={24} />
+                <span className={`font-serif text-xl ${currentTheme.text}`}>Plan a Date Night</span>
+            </motion.button>
 
-                <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    Plan Our Date Night 🌙
-                </h2>
-
-                {status === 'success' ? (
-                    <div className="text-center py-8">
-                        <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Heart className="w-8 h-8 text-green-400 fill-green-400" />
-                        </div>
-                        <h3 className="text-xl text-white font-medium mb-2">Request Sent!</h3>
-                        <p className="text-gray-400 mb-6">
-                            I've received your invitation. I'll confirm with you soon! ❤️
-                        </p>
-                        <button
-                            onClick={onClose}
-                            className="w-full py-3 bg-gray-800 rounded-xl text-white hover:bg-gray-700 transition-colors"
+            <AnimatePresence>
+                {isOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ y: 50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 50, opacity: 0 }}
+                            className="w-full max-w-md bg-gray-900/90 border border-purple-500/30 rounded-2xl p-6 shadow-2xl relative"
                         >
-                            Close
-                        </button>
-                    </div>
-                ) : (
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <label className="block text-gray-400 text-sm mb-1">Date Type</label>
-                            <div className="grid grid-cols-2 gap-2">
-                                {DATE_TYPES.map((type) => (
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="absolute top-4 right-4 text-gray-400 hover:text-white"
+                            >
+                                <X size={24} />
+                            </button>
+
+                            <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                                Plan Our Date Night 🌙
+                            </h2>
+
+                            {status === 'success' ? (
+                                <div className="text-center py-8">
+                                    <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <Heart className="w-8 h-8 text-green-400 fill-green-400" />
+                                    </div>
+                                    <h3 className="text-xl text-white font-medium mb-2">Request Sent!</h3>
+                                    <p className="text-gray-400 mb-6">
+                                        I've received your invitation. I'll confirm with you soon! ❤️
+                                    </p>
                                     <button
-                                        key={type}
-                                        type="button"
-                                        onClick={() => setFormData({ ...formData, type })}
-                                        className={`p-2 text-sm rounded-lg border transition-all ${formData.type === type
-                                                ? 'bg-purple-600/30 border-purple-500 text-white'
-                                                : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
-                                            }`}
+                                        onClick={() => setIsOpen(false)}
+                                        className="w-full py-3 bg-gray-800 rounded-xl text-white hover:bg-gray-700 transition-colors"
                                     >
-                                        {type}
+                                        Close
                                     </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-gray-400 text-sm mb-1">Date</label>
-                                <div className="relative">
-                                    <Calendar className="absolute left-3 top-3 text-gray-500 w-4 h-4" />
-                                    <input
-                                        type="date"
-                                        required
-                                        value={formData.date}
-                                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:border-purple-500 focus:outline-none"
-                                    />
                                 </div>
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 text-sm mb-1">Time</label>
-                                <div className="relative">
-                                    <Clock className="absolute left-3 top-3 text-gray-500 w-4 h-4" />
-                                    <input
-                                        type="time"
-                                        required
-                                        value={formData.time}
-                                        onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:border-purple-500 focus:outline-none"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-400 text-sm mb-1">Special Note (Optional)</label>
-                            <textarea
-                                rows="2"
-                                value={formData.note}
-                                onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                                placeholder="Anything special in mind?..."
-                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-purple-500 focus:outline-none resize-none"
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={status === 'sending'}
-                            className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-white font-medium shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
-                        >
-                            {status === 'sending' ? (
-                                'Sending Request...'
                             ) : (
-                                <>
-                                    <Send size={18} />
-                                    Book Date Night
-                                </>
+                                <form onSubmit={handleSubmit} className="space-y-4">
+                                    <div>
+                                        <label className="block text-gray-400 text-sm mb-1">Date Type</label>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {DATE_TYPES.map((type) => (
+                                                <button
+                                                    key={type}
+                                                    type="button"
+                                                    onClick={() => setFormData({ ...formData, type })}
+                                                    className={`p-2 text-sm rounded-lg border transition-all ${formData.type === type
+                                                        ? 'bg-purple-600/30 border-purple-500 text-white'
+                                                        : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                                                        }`}
+                                                >
+                                                    {type}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-gray-400 text-sm mb-1">Date</label>
+                                            <div className="relative">
+                                                <Calendar className="absolute left-3 top-3 text-gray-500 w-4 h-4" />
+                                                <input
+                                                    type="date"
+                                                    required
+                                                    value={formData.date}
+                                                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:border-purple-500 focus:outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-400 text-sm mb-1">Time</label>
+                                            <div className="relative">
+                                                <Clock className="absolute left-3 top-3 text-gray-500 w-4 h-4" />
+                                                <input
+                                                    type="time"
+                                                    required
+                                                    value={formData.time}
+                                                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                                                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:border-purple-500 focus:outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-400 text-sm mb-1">Special Note (Optional)</label>
+                                        <textarea
+                                            rows="2"
+                                            value={formData.note}
+                                            onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                                            placeholder="Anything special in mind?..."
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-purple-500 focus:outline-none resize-none"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={status === 'sending'}
+                                        className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-white font-medium shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                                    >
+                                        {status === 'sending' ? (
+                                            'Sending Request...'
+                                        ) : (
+                                            <>
+                                                <Send size={18} />
+                                                Book Date Night
+                                            </>
+                                        )}
+                                    </button>
+                                </form>
                             )}
-                        </button>
-                    </form>
+                        </motion.div>
+                    </div>
                 )}
-            </motion.div>
+            </AnimatePresence>
         </div>
     );
 };
