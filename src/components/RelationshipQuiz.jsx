@@ -7,21 +7,21 @@ import { useTheme } from '../context/ThemeContext';
 const QUESTIONS = [
     {
         id: 1,
-        question: "What is my absolute favorite food?",
+        question: "What is our absolute favorite food?",
         options: ["Pizza", "Biryani", "Burgers", "Pasta"],
         answer: "Biryani", // Placeholder
-        successMessage: "You know the way to my heart! 🍗"
+        successMessage: "You know the way 🍗"
     },
     {
         id: 2,
-        question: "Where did we have our first date?",
-        options: ["Coffee Shop", "Park", "Cinema", "Beach"],
-        answer: "Coffee Shop", // Placeholder
-        successMessage: "It was magical, wasn't it? ☕"
+        question: "Who is your best friend?",
+        options: ["Iniya", "Varsha", "Isha", "Lalentika", "Lakshita", "Gouri", "ALL"],
+        answer: "ALL", // Placeholder
+        successMessage: "It's actually zeesh the nigga but its okay. "
     },
     {
         id: 3,
-        question: "What color do I look best in?",
+        question: "What color do you look best in?",
         options: ["Black", "Blue", "White", "Red"],
         answer: "Black", // Placeholder
         successMessage: "You have great taste! 🖤"
@@ -29,7 +29,7 @@ const QUESTIONS = [
     {
         id: 4,
         question: "Which date is our Anniversary?",
-        options: ["May 9th", "Sep 5th", "Dec 1st", "Feb 14th"],
+        options: ["Sep 5th", "Dec 1st", "May 9th", "Feb 14th"],
         answer: "May 9th", // Based on password hint 0905
         successMessage: "A day I'll never forget! 📅"
     }
