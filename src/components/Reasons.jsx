@@ -8,12 +8,13 @@ const Reasons = () => {
 
     const reasonsList = [
         "Your smile lights up my darkest days.",
-        "The way you understand me without words.",
-        "Your laugh is my favorite melody.",
+        "The way you understand me.",
+        "Your laugh is my favorite thing to hear.",
         "You support my dreams like no one else.",
-        "Every moment with you is a treasure.",
-        "Reason #6: You inspire me to be a better person every day.",
-        "You make the world feel like a better place."
+        "Every moment with you is a treasure or adventurous.",
+        "You inspire me to be a better person every day.",
+        "You make me feel loved.",
+        "You make the world feel like a better place.",
     ];
 
     const [cards, setCards] = useState(reasonsList);

@@ -1,15 +1,24 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Music, Play, Pause, Volume2, VolumeX } from 'lucide-react';
+import { Music, Play, Pause, Volume2, VolumeX, SkipBack, SkipForward } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import bgMusic from '../assets/audio/bg_music.mp3';
+import billie from '../assets/audio/Billie Eilish - LUNCH (Official Lyric Video) - BillieEilishVEVO.mp3';
+import jvke from '../assets/audio/JVKE - her (official lyric video) - JVKE.mp3';
 
 const MusicPlayer = forwardRef((props, ref) => {
     const { currentTheme } = useTheme();
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const audioRef = useRef(null);
+
+    const songs = [
+        { title: "Background Music", src: bgMusic },
+        { title: "LUNCH - Billie Eilish", src: billie },
+        { title: "her - JVKE", src: jvke }
+    ];
 
     useImperativeHandle(ref, () => ({
         playMusic: () => {
@@ -24,7 +33,6 @@ const MusicPlayer = forwardRef((props, ref) => {
                         setIsMuted(false);
                     }).catch(error => {
                         console.error("Autoplay prevented:", error);
-                        // If blocked, we state it's paused so user can click play
                         setIsPlaying(false);
                     });
                 }
@@ -50,16 +58,41 @@ const MusicPlayer = forwardRef((props, ref) => {
         }
     };
 
+    const nextSong = () => {
+        let newIndex = (currentSongIndex + 1) % songs.length;
+        setCurrentSongIndex(newIndex);
+    };
+
+    const prevSong = () => {
+        let newIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        setCurrentSongIndex(newIndex);
+    };
+
+    // Auto-play when song changes if it was already playing
     useEffect(() => {
         if (audioRef.current) {
-            audioRef.current.loop = true;
+            audioRef.current.src = songs[currentSongIndex].src;
+            if (isPlaying) {
+                audioRef.current.play().catch((e) => console.log("Play interrupted or failed", e));
+            }
         }
-    }, []);
+    }, [currentSongIndex]);
+
+    // Loop logic: when one song ends, go to next
+    useEffect(() => {
+        const handleEnded = () => nextSong();
+        const audioEl = audioRef.current;
+        if (audioEl) {
+            audioEl.addEventListener('ended', handleEnded);
+            return () => audioEl.removeEventListener('ended', handleEnded);
+        }
+    }, [currentSongIndex]); // Re-bind if needed, though ref should be stable. Dependent on nextSong closure if not useCallbacked, but here it's fine as state updates trigger re-render.
 
     return (
         <div className="fixed bottom-6 left-6 z-50">
             {/* Native Audio Element */}
-            <audio ref={audioRef} src={bgMusic} preload="auto" />
+            {/* src is handled by useEffect/ref direct assignment, but good to have initial */}
+            <audio ref={audioRef} preload="auto" />
 
             <div className="flex items-center gap-2">
                 <motion.button
@@ -87,13 +120,23 @@ const MusicPlayer = forwardRef((props, ref) => {
                             exit={{ width: 0, opacity: 0, x: -20 }}
                             className={`flex items-center gap-2 p-2 rounded-full backdrop-blur-md border ${currentTheme.border} ${currentTheme.secondary} overflow-hidden`}
                         >
+                            <button onClick={prevSong} className={`p-2 rounded-full hover:bg-white/10 ${currentTheme.text}`}>
+                                <SkipBack size={20} />
+                            </button>
+
                             <button onClick={togglePlay} className={`p-2 rounded-full hover:bg-white/10 ${currentTheme.text}`}>
                                 {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                            </button>
+
+                            <button onClick={nextSong} className={`p-2 rounded-full hover:bg-white/10 ${currentTheme.text}`}>
+                                <SkipForward size={20} />
                             </button>
 
                             <button onClick={toggleMute} className={`p-2 rounded-full hover:bg-white/10 ${currentTheme.text}`}>
                                 {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
                             </button>
+
+                            {/* Optional: Song Title Marquee or Tooltip could go here */}
                         </motion.div>
                     )}
                 </AnimatePresence>
