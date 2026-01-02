@@ -32,16 +32,16 @@ const MusicPlayer = ({ autoPlayTrigger }) => {
 
     return (
         <div className="fixed bottom-6 left-6 z-50">
-            {/* Hidden Player for YouTube Audio */}
-            <div className="hidden">
+            {/* Hidden Player for YouTube Audio - Must not be display:none for YouTube API to work */}
+            <div className="fixed -top-full opacity-0 pointer-events-none">
                 <ReactPlayer
                     url={SONG_URL}
                     playing={isPlaying}
                     muted={isMuted}
                     loop={true}
                     volume={1}
-                    width="0"
-                    height="0"
+                    width="1px"
+                    height="1px"
                     playsinline={true}
                     onReady={() => console.log("Music Player Ready")}
                     onError={(e) => console.error("Music Player Error:", e)}
