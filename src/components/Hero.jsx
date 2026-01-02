@@ -66,6 +66,8 @@ const Hero = () => {
                             </h1>
                             <p className={`text-lg md:text-xl ${currentTheme.text} max-w-lg mx-auto leading-relaxed font-light opacity-90`}>
                                 To the most beautiful soul, welcome to your special space.
+                                <br />I know im bad editing videos but i can do something which im decent at which is this.
+                                <br />Sooooooo here you go cutie.
                                 <br />Scroll down to see why I love you.
                             </p>
 
