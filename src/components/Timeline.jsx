@@ -4,11 +4,11 @@ import { useTheme } from '../context/ThemeContext';
 import { Heart, Star } from 'lucide-react';
 
 // Import images
-import imgCafe from '../assets/memories/cafe.jpg';
-import imgPlushies from '../assets/memories/plushies.jpg';
+import imgCafe from '../assets/memories/first_glance_new.jpg';
+import imgPlushies from '../assets/memories/adventures_new.jpg';
+import imgMirror from '../assets/memories/stronger_new.jpg';
 import imgTravel from '../assets/memories/travel.jpg';
 import imgCarrying from '../assets/memories/carrying.jpg';
-import imgMirror from '../assets/memories/mirror.jpg';
 
 const Timeline = () => {
     const { currentTheme } = useTheme();
