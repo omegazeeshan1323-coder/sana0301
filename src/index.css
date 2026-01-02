@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+  --font-cursive: "Dancing Script", cursive;
+
+  --color-rose-950: #2c0b0e;
+  --color-forest-950: #0c1a12;
+  --color-sky-950: #081028;
+
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}
+
+/* Utilities for scrollbar since @apply might be tricky with psotcss plugin in v4 if not configured */
+@utility scrollbar-thumb-rounded {
+  border-radius: 9999px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+body {
+  @apply antialiased transition-colors duration-700;
+  /* Removed ease-in-out to avoid build error for now */
+}
