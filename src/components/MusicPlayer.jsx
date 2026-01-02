@@ -43,10 +43,16 @@ const MusicPlayer = forwardRef((props, ref) => {
                     playsinline={true}
                     config={{
                         youtube: {
-                            playerVars: { origin: window.location.origin }
+                            playerVars: {
+                                origin: window.location.origin,
+                                autoplay: 1,
+                                playsinline: 1
+                            }
                         }
                     }}
                     onReady={() => console.log("Music Player Ready")}
+                    onStart={() => console.log("Music Player Started")}
+                    onPlay={() => console.log("Music Player Playing")}
                     onError={(e) => console.error("Music Player Error:", e)}
                 />
             </div>
