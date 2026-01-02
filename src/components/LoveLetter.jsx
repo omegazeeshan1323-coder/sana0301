@@ -43,25 +43,25 @@ const LoveLetter = () => {
                             </button>
 
                             <div className="font-cursive text-2xl md:text-3xl leading-relaxed space-y-6">
-                                <p>My Dearest Sana,</p>
+                                <p>My Cutie Sana,</p>
                                 <p>
-                                    Happy Birthday, my love! 🎉
+                                    Happy Birthday, my doryyyy! 🎉
                                 </p>
                                 <p>
-                                    On this special day, I want to remind you of how incredibly precious you are to me.
+                                    On this special day, I want to remind you of how incredibly precious and important you are to me.
                                     Since May 9, 2023, you have filled my life with more joy, laughter, and warmth than I ever imagined possible.
                                 </p>
                                 <p>
-                                    Watching you grow, achieve your dreams, and simply be your amazing self is my greatest privilege.
+                                    Watching you being autistic, being a chef and being a GOOD fucking person (ykwim)is my greatest privilege.
                                     You are not just my girlfriend, you are my best friend, my safe space, and my home.
                                 </p>
                                 <p>
                                     May this year bring you as much happiness as you bring into my life every single day.
-                                    I love you more than words can say.
+                                    I love you more than words can say. I know im bad editing videos but i can do something which im decent at which is this. Sooooooo here you go cutie
                                 </p>
                                 <p className="text-right mt-12">
                                     Forever yours,<br />
-                                    <span className="text-4xl">Zeeshan</span>
+                                    <span className="text-4xl">Niggshan/Dogshan/Zeeshan/Slaveshan</span>
                                 </p>
                             </div>
                         </motion.div>
