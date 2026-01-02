@@ -11,8 +11,9 @@ const Gallery = () => {
     // Convert object of modules to array of file paths
     const memories = Object.values(galleryFiles).map(file => file.default);
 
-    // Helper to check if file is video
-    const isVideo = (path) => path.match(/\.(mp4|webm)$/i);
+    // Helper to check if file type is video
+    // Checks for extension even if there are query params (e.g. ?t=123)
+    const isVideo = (path) => /\.(mp4|webm)($|\?)/i.test(path);
 
     // Placeholder if no items found
     if (memories.length === 0) {
