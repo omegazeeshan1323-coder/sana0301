@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { Gamepad2, CalendarHeart } from 'lucide-react';
 import Home from './Home';
