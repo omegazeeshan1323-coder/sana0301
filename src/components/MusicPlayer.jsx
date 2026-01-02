@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Music, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import ReactPlayer from 'react-player';
 
-const MusicPlayer = ({ autoPlayTrigger }) => {
+const MusicPlayer = forwardRef((props, ref) => {
     const { currentTheme } = useTheme();
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(true); // Start muted to allow autoplay
+    const [isMuted, setIsMuted] = useState(false); // Unmuted by default for manual trigger
     const [isExpanded, setIsExpanded] = useState(false);
 
     // Birds of a Feather - Billie Eilish
     const SONG_URL = "https://www.youtube.com/watch?v=d5gf9dXbPi0";
 
-    // Auto-play when user unlocks the screen (interaction detected)
-    useEffect(() => {
-        if (autoPlayTrigger) {
+    useImperativeHandle(ref, () => ({
+        playMusic: () => {
             setIsPlaying(true);
-            // Attempt to unmute after a short delay
-            setTimeout(() => setIsMuted(false), 2000);
+            setIsMuted(false);
         }
-    }, [autoPlayTrigger]);
+    }));
 
     const togglePlay = () => {
         setIsPlaying(!isPlaying);
@@ -43,6 +41,11 @@ const MusicPlayer = ({ autoPlayTrigger }) => {
                     width="1px"
                     height="1px"
                     playsinline={true}
+                    config={{
+                        youtube: {
+                            playerVars: { origin: window.location.origin }
+                        }
+                    }}
                     onReady={() => console.log("Music Player Ready")}
                     onError={(e) => console.error("Music Player Error:", e)}
                 />
@@ -87,6 +90,6 @@ const MusicPlayer = ({ autoPlayTrigger }) => {
             </div>
         </div>
     );
-};
+});
 
 export default MusicPlayer;

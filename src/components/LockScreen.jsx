@@ -13,10 +13,11 @@ const LockScreen = ({ onUnlock }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (password === CORRECT_PASSWORD) {
+            // Immediately trigger music (synchronous with click)
+            onUnlock(true); // Helper flag to say "just start music"
+
             setIsUnlocked(true);
-            setTimeout(() => {
-                onUnlock();
-            }, 1500); // Wait for unlock animation
+            // The unmounting happens after animation, but music starts NOW.
         } else {
             setError(true);
             setTimeout(() => setError(false), 500);

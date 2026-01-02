@@ -10,13 +10,22 @@ import DateScheduler from './components/DateScheduler';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const musicRef = useRef(null);
+
+  const handleUnlock = () => {
+    setIsAuthenticated(true);
+    // Trigger music play immediately on user interaction
+    if (musicRef.current) {
+      musicRef.current.playMusic();
+    }
+  };
 
   return (
     <ThemeProvider>
       <BackgroundEffects />
 
       {/* LockScreen covers everything until unlocked */}
-      <LockScreen onUnlock={() => setIsAuthenticated(true)} />
+      <LockScreen onUnlock={handleUnlock} />
 
       {/* Main Content - Visible behind the lock screen (fading in/out) */}
       <div className={isAuthenticated ? 'pointer-events-auto' : 'pointer-events-none'}>
@@ -24,7 +33,7 @@ function App() {
       </div>
 
       {/* Music player triggers when authenticated */}
-      <MusicPlayer autoPlayTrigger={isAuthenticated} />
+      <MusicPlayer ref={musicRef} />
     </ThemeProvider>
   );
 }
