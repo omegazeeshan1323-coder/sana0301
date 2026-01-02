@@ -1,17 +1,26 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Music, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import ReactPlayer from 'react-player';
 
-const MusicPlayer = () => {
+const MusicPlayer = ({ autoPlayTrigger }) => {
     const { currentTheme } = useTheme();
-    const [isPlaying, setIsPlaying] = useState(true);
-    const [isMuted, setIsMuted] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isMuted, setIsMuted] = useState(true); // Start muted to allow autoplay
     const [isExpanded, setIsExpanded] = useState(false);
 
     // Birds of a Feather - Billie Eilish
     const SONG_URL = "https://www.youtube.com/watch?v=d5gf9dXbPi0";
+
+    // Auto-play when user unlocks the screen (interaction detected)
+    useEffect(() => {
+        if (autoPlayTrigger) {
+            setIsPlaying(true);
+            // Attempt to unmute after a short delay
+            setTimeout(() => setIsMuted(false), 2000);
+        }
+    }, [autoPlayTrigger]);
 
     const togglePlay = () => {
         setIsPlaying(!isPlaying);
@@ -34,6 +43,8 @@ const MusicPlayer = () => {
                     width="0"
                     height="0"
                     playsinline={true}
+                    onReady={() => console.log("Music Player Ready")}
+                    onError={(e) => console.error("Music Player Error:", e)}
                 />
             </div>
 
@@ -46,7 +57,12 @@ const MusicPlayer = () => {
                 >
                     <div className={`absolute inset-0 bg-gradient-to-tr ${currentTheme.gradient} opacity-50`} />
                     <div className="relative z-10">
-                        <Music size={24} className={isPlaying ? 'animate-pulse' : ''} />
+                        <motion.div
+                            animate={{ rotate: isPlaying ? 360 : 0 }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        >
+                            <Music size={24} />
+                        </motion.div>
                     </div>
                 </motion.button>
 

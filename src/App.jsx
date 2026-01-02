@@ -23,8 +23,8 @@ function App() {
         <Home />
       </div>
 
-      {/* Music player is always present to allow auto-play */}
-      <MusicPlayer />
+      {/* Music player triggers when authenticated */}
+      <MusicPlayer autoPlayTrigger={isAuthenticated} />
     </ThemeProvider>
   );
 }
