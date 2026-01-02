@@ -61,7 +61,7 @@ const Hero = () => {
                             transition={{ duration: 1, delay: 0.2 }}
                             className="space-y-6"
                         >
-                            <h1 className={`text-5xl md:text-7xl font-serif ${currentTheme.accentGradient} mb-4`}>
+                            <h1 className={`text-5xl md:text-7xl font-serif ${currentTheme.accentGradient} mb-4 pb-2 leading-relaxed`}>
                                 Happy Birthday, Sana!
                             </h1>
                             <p className={`text-lg md:text-xl ${currentTheme.text} max-w-lg mx-auto leading-relaxed font-light opacity-90`}>
