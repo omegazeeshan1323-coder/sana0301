@@ -5,19 +5,21 @@ import { useTheme } from '../context/ThemeContext';
 const Gallery = () => {
     const { currentTheme } = useTheme();
 
-    // Dynamically import all images from the gallery folder
-    // This allows the user to just drop files in src/assets/gallery without changing code
-    const images = import.meta.glob('../assets/gallery/*.{png,jpg,jpeg,svg}', { eager: true });
+    // Dynamically import all images AND videos from the gallery folder
+    const galleryFiles = import.meta.glob('../assets/gallery/*.{png,jpg,jpeg,svg,mp4,webm}', { eager: true });
 
-    // Convert object of modules to array of image paths
-    const memories = Object.values(images).map(img => img.default);
+    // Convert object of modules to array of file paths
+    const memories = Object.values(galleryFiles).map(file => file.default);
 
-    // Placeholder if no images found
+    // Helper to check if file is video
+    const isVideo = (path) => path.match(/\.(mp4|webm)$/i);
+
+    // Placeholder if no items found
     if (memories.length === 0) {
         return (
             <div className="py-20 px-4 text-center">
                 <h2 className={`text-4xl font-serif mb-8 ${currentTheme.accent}`}>Memory Lane</h2>
-                <p className="text-gray-400">Add photos to src/assets/gallery to see them here!</p>
+                <p className="text-gray-400">Add photos or videos to src/assets/gallery to see them here!</p>
             </div>
         );
     }
@@ -37,12 +39,22 @@ const Gallery = () => {
                         className={`relative rounded-xl overflow-hidden cursor-pointer group ${index % 3 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'col-span-1 row-span-1 aspect-square'
                             }`}
                     >
-                        {/* Real Image */}
-                        <img
-                            src={src}
-                            alt={`Memory ${index + 1}`}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
+                        {isVideo(src) ? (
+                            <video
+                                src={src}
+                                className="w-full h-full object-cover"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                            />
+                        ) : (
+                            <img
+                                src={src}
+                                alt={`Memory ${index + 1}`}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                        )}
 
                         {/* Hover Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
