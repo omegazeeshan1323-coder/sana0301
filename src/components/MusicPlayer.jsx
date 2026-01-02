@@ -1,62 +1,65 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Music, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import ReactPlayer from 'react-player';
+import bgMusic from '../assets/audio/bg_music.mp3';
 
 const MusicPlayer = forwardRef((props, ref) => {
     const { currentTheme } = useTheme();
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(false); // Unmuted by default for manual trigger
+    const [isMuted, setIsMuted] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-
-    // Birds of a Feather - Billie Eilish (Lyric Video - Better Embed Support)
-    const SONG_URL = "https://www.youtube.com/watch?v=haGkI4Y0g7E";
+    const audioRef = useRef(null);
 
     useImperativeHandle(ref, () => ({
         playMusic: () => {
-            setIsPlaying(true);
-            // Attempt to unmute after a short delay to allow player to start
-            setTimeout(() => setIsMuted(false), 1000);
+            if (audioRef.current) {
+                audioRef.current.volume = 1;
+                audioRef.current.muted = false;
+                const playPromise = audioRef.current.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        setIsPlaying(true);
+                        setIsMuted(false);
+                    }).catch(error => {
+                        console.error("Autoplay prevented:", error);
+                        // If blocked, we state it's paused so user can click play
+                        setIsPlaying(false);
+                    });
+                }
+            }
         }
     }));
 
     const togglePlay = () => {
-        setIsPlaying(!isPlaying);
+        if (audioRef.current) {
+            if (isPlaying) {
+                audioRef.current.pause();
+            } else {
+                audioRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
+        }
     };
 
     const toggleMute = () => {
-        setIsMuted(!isMuted);
+        if (audioRef.current) {
+            audioRef.current.muted = !isMuted;
+            setIsMuted(!isMuted);
+        }
     };
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.loop = true;
+        }
+    }, []);
 
     return (
         <div className="fixed bottom-6 left-6 z-50">
-            {/* Hidden Player for YouTube Audio - Kept on-screen to avoid browser throttling */}
-            <div className="fixed bottom-0 right-0 w-2 h-2 opacity-[0.01] pointer-events-none z-[-1]">
-                <ReactPlayer
-                    url={SONG_URL}
-                    playing={isPlaying}
-                    muted={isMuted}
-                    loop={true}
-                    volume={1}
-                    width="1px"
-                    height="1px"
-                    playsinline={true}
-                    config={{
-                        youtube: {
-                            playerVars: {
-                                origin: window.location.origin,
-                                autoplay: 1,
-                                playsinline: 1
-                            }
-                        }
-                    }}
-                    onReady={() => console.log("Music Player Ready")}
-                    onStart={() => console.log("Music Player Started")}
-                    onPlay={() => console.log("Music Player Playing")}
-                    onError={(e) => console.error("Music Player Error:", e)}
-                />
-            </div>
+            {/* Native Audio Element */}
+            <audio ref={audioRef} src={bgMusic} preload="auto" />
 
             <div className="flex items-center gap-2">
                 <motion.button
