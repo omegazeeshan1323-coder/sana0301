@@ -27,7 +27,7 @@ const DateScheduler = () => {
         setStatus('sending');
 
         try {
-            const response = await fetch("https://formsubmit.co/ajax/zeesh.baig.1323@gmail.com", {
+            const response = await fetch("https://formsubmit.co/ajax/zeeshan.baig.1323@gmail.com", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
