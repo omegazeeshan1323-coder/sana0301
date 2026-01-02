@@ -10,13 +10,14 @@ const MusicPlayer = forwardRef((props, ref) => {
     const [isMuted, setIsMuted] = useState(false); // Unmuted by default for manual trigger
     const [isExpanded, setIsExpanded] = useState(false);
 
-    // Birds of a Feather - Billie Eilish
-    const SONG_URL = "https://www.youtube.com/watch?v=d5gf9dXbPi0";
+    // Birds of a Feather - Billie Eilish (Lyric Video - Better Embed Support)
+    const SONG_URL = "https://www.youtube.com/watch?v=haGkI4Y0g7E";
 
     useImperativeHandle(ref, () => ({
         playMusic: () => {
             setIsPlaying(true);
-            setIsMuted(false);
+            // Attempt to unmute after a short delay to allow player to start
+            setTimeout(() => setIsMuted(false), 1000);
         }
     }));
 
